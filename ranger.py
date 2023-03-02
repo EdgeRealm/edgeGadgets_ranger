@@ -1,4 +1,4 @@
-#!/usr/bin/python -O
+#!/Users/edge/Applications/anaconda3/envs/daily/bin/python -O
 # This file is part of ranger, the console file manager.  (coding: utf-8)
 # License: GNU GPL version 3, see the file "AUTHORS" for details.
 

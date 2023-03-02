@@ -374,7 +374,7 @@ class Loader(FileManagerAware):
             item.destroy()
             del self.queue[index]
             if item.progressbar_supported:
-                self.fm.ui.status.request_redraw()
+                self.fm.ui.titlebar.request_redraw()    # edgeEdit
 
     def pause(self, state):
         """Change the pause-state to 1 (pause), 0 (no pause) or -1 (toggle)"""
@@ -442,14 +442,14 @@ class Loader(FileManagerAware):
                 break
         else:
             if item.progressbar_supported:
-                self.fm.ui.status.request_redraw()
+                self.fm.ui.titlebar.request_redraw()    # edgeEdit
 
     def _remove_current_process(self, item):
         item.load_generator = None
         self.queue.remove(item)
         self.fm.signal_emit("loader.after", loadable=item, fm=self.fm)
         if item.progressbar_supported:
-            self.fm.ui.status.request_redraw()
+            self.fm.ui.titlebar.request_redraw()    # edgeEdit
 
     def has_work(self):
         """Is there anything to load?"""

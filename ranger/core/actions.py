@@ -100,7 +100,7 @@ class Actions(  # pylint: disable=too-many-instance-attributes,too-many-public-m
         else:
             return
         self.mode = mode
-        self.ui.status.request_redraw()
+        self.ui.titlebar.request_redraw()   # edgeEdit
 
     def set_option_from_string(self, option_name, value, localpath=None, tags=None):
         if option_name not in ALLOWED_SETTINGS:
@@ -163,7 +163,7 @@ class Actions(  # pylint: disable=too-many-instance-attributes,too-many-public-m
             cwd.unload()
             cwd.load_content()
 
-    def notify(self, obj, duration=4, bad=False, exception=None):
+    def notify(self, obj, duration=4, bad=False, exception=None):   # edgeNote duration
         """:notify <text>
 
         Display the text in the statusbar.
@@ -187,7 +187,7 @@ class Actions(  # pylint: disable=too-many-instance-attributes,too-many-public-m
             LOG.exception(exception)
 
         if self.ui and self.ui.is_on:
-            self.ui.status.notify("  ".join(text.split("\n")),
+            self.ui.titlebar.notify("  ".join(text.split("\n")),    # edgeEdit
                                   duration=duration, bad=bad)
         else:
             print(text)
@@ -208,7 +208,7 @@ class Actions(  # pylint: disable=too-many-instance-attributes,too-many-public-m
     def get_cumulative_size(self):
         for fobj in self.thistab.get_selection() or ():
             fobj.look_up_cumulative_size()
-        self.ui.status.request_redraw()
+        self.ui.titlebar.request_redraw()   # edgeEdit
         self.ui.redraw_main_column()
 
     def redraw_window(self):
@@ -765,7 +765,7 @@ class Actions(  # pylint: disable=too-many-instance-attributes,too-many-public-m
             self.move(down=narg)
 
         self.ui.redraw_main_column()
-        self.ui.status.need_redraw = True
+        self.ui.titlebar.need_redraw = True # edgeEdit
 
     def mark_in_direction(self, val=True, dirarg=None):
         cwd = self.thisdir
@@ -1360,7 +1360,7 @@ class Actions(  # pylint: disable=too-many-instance-attributes,too-many-public-m
             self.tabs[newtab_index] = oldtab
             self.current_tab = newtab_index
             self.thistab = oldtab
-            self.ui.titlebar.request_redraw()
+            self.ui.titlebar.request_redraw()   # edgeEdit
             self.signal_emit('tab.layoutchange')
 
     def tabshift(self, *args, **kwargs):

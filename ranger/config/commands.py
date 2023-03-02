@@ -120,7 +120,7 @@ class alias(Command):
 class echo(Command):
     """:echo <text>
 
-    Display the text in the statusbar.
+    Display the text in the titlebar.
     """
 
     def execute(self):
@@ -912,7 +912,7 @@ class mark_tag(Command):
                 continue
             if not tags or tag in tags:
                 cwd.mark_item(fileobj, val=self.do_mark)
-        self.fm.ui.status.need_redraw = True
+        self.fm.ui.titlebar.need_redraw = True   # edgeEdit
         self.fm.ui.need_redraw = True
 
 

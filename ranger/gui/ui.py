@@ -78,7 +78,7 @@ class UI(  # pylint: disable=too-many-instance-attributes,too-many-public-method
         self.titlebar = None
         self._viewmode = None
         self.taskview = None
-        self.status = None
+        # self.status = None    # edgeEdit
         self.console = None
         self.pager = None
         self.multiplexer = None
@@ -209,7 +209,7 @@ class UI(  # pylint: disable=too-many-instance-attributes,too-many-public-method
 
     def press(self, key):
         keybuffer = self.keybuffer
-        self.status.clear_message()
+        self.titlebar.clear_message()   # edgeEdit
 
         keybuffer.add(key)
         self.fm.hide_bookmarks()
@@ -286,9 +286,6 @@ class UI(  # pylint: disable=too-many-instance-attributes,too-many-public-method
         from ranger.gui.widgets.taskview import TaskView
         from ranger.gui.widgets.pager import Pager
 
-        # Create a titlebar
-        self.titlebar = TitleBar(self.win)
-        self.add_child(self.titlebar)
 
         # Create the browser view
         self.settings.signal_bind('setopt.viewmode', self._set_viewmode)
@@ -302,9 +299,13 @@ class UI(  # pylint: disable=too-many-instance-attributes,too-many-public-method
         self.taskview.visible = False
         self.add_child(self.taskview)
 
+        # Create a titlebar 
+        self.titlebar = TitleBar(self.win)    
+        self.titlebar.column = column=self.browser.main_column # edgeEdit
+        self.add_child(self.titlebar)
         # Create the status bar
-        self.status = StatusBar(self.win, self.browser.main_column)
-        self.add_child(self.status)
+        # self.status = StatusBar(self.win, self.browser.main_column)   # edgeEdit
+        # self.add_child(self.status)   # edgeEdit
 
         # Create the console
         self.console = Console(self.win)
@@ -334,11 +335,11 @@ class UI(  # pylint: disable=too-many-instance-attributes,too-many-public-method
         if self.console.wait_for_command_input or self.console.question_queue:
             self.console.focused = True
             self.console.visible = True
-            self.status.visible = False
+            # self.status.visible = False   # edgeEdit
         else:
             self.console.focused = False
             self.console.visible = False
-            self.status.visible = True
+            # self.status.visible = True    # edgeEdit
 
         self.draw()
         self.finalize()
@@ -357,11 +358,11 @@ class UI(  # pylint: disable=too-many-instance-attributes,too-many-public-method
         self.termsize = self.win.getmaxyx()
         y, x = self.termsize
 
-        self.browser.resize(self.settings.status_bar_on_top and 2 or 1, 0, y - 2, x)
-        self.taskview.resize(1, 0, y - 2, x)
-        self.pager.resize(1, 0, y - 2, x)
+        self.browser.resize(self.settings.status_bar_on_top and 2 or 1, 0, y - 1, x)
+        self.taskview.resize(1, 0, y - 1, x)
+        self.pager.resize(1, 0, y - 1, x)
         self.titlebar.resize(0, 0, 1, x)
-        self.status.resize(self.settings.status_bar_on_top and 1 or y - 1, 0, 1, x)
+        # self.status.resize(self.settings.status_bar_on_top and 1 or y - 1, 0, 1, x)   # edgeEdit
         self.console.resize(y - 1, 0, 1, x)
 
     def draw(self):
@@ -446,7 +447,7 @@ class UI(  # pylint: disable=too-many-instance-attributes,too-many-public-method
 
     def open_console(self, string='', prompt=None, position=None):
         if self.console.open(string, prompt=prompt, position=position):
-            self.status.msg = None
+            self.titlebar.msg =  None # edgeEdit
 
     def close_console(self):
         self.console.close()
@@ -466,7 +467,7 @@ class UI(  # pylint: disable=too-many-instance-attributes,too-many-public-method
         self.browser.main_column.need_redraw = True
 
     def redraw_statusbar(self):
-        self.status.need_redraw = True
+        self.titlebar.need_redraw = True    # edgeEdit
 
     def close_taskview(self):
         self.taskview.visible = False
@@ -541,7 +542,7 @@ class UI(  # pylint: disable=too-many-instance-attributes,too-many-public-method
             sys.stdout.flush()
 
     def hint(self, text=None):
-        self.status.hint = text
+        self.titlebar.hint = text # edgeEdit
 
     def get_pager(self):
         if self.browser.pager and self.browser.pager.visible:

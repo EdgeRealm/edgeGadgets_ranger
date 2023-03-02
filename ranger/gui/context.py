@@ -4,7 +4,7 @@
 from __future__ import (absolute_import, division, print_function)
 
 
-CONTEXT_KEYS = [
+CONTEXT_KEYS = [    # edgeNote colorNames
     'reset', 'error', 'badinfo',
     'in_browser', 'in_statusbar', 'in_titlebar', 'in_console',
     'in_pager', 'in_taskview',
@@ -25,7 +25,7 @@ CONTEXT_KEYS = [
     'infostring',
     'vcsfile', 'vcsremote', 'vcsinfo', 'vcscommit', 'vcsdate',
     'vcsconflict', 'vcschanged', 'vcsunknown', 'vcsignored', 'vcsuntracked',
-    'vcsstaged', 'vcssync', 'vcsnone', 'vcsbehind', 'vcsahead', 'vcsdiverged'
+    'vcsstaged', 'vcssync', 'vcsnone', 'vcsbehind', 'vcsahead', 'vcsdiverged', 'info'   # edgeEdit
 ]
 
 

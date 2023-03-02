@@ -410,7 +410,7 @@ class FM(Actions,  # pylint: disable=too-many-instance-attributes
             while True:
                 loader.work()
                 if loader.has_work():
-                    throbber(loader.status)
+                    throbber(loader.status) 
                 else:
                     throbber(remove=True)
 
