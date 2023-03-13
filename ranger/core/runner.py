@@ -205,7 +205,7 @@ class Runner(object):  # pylint: disable=too-few-public-methods
             context.wait = False
         if 'w' in context.flags:
             if not pipe_output and context.wait:  # <-- sanity check
-                wait_for_enter = True
+                wait_for_enter = False
         if 'r' in context.flags:
             # TODO: make 'r' flag work with pipes
             if 'sudo' not in get_executables():

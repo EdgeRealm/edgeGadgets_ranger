@@ -1,0 +1,50 @@
+mkdir 1to5
+mkdir reference
+rename RobustRL_T1_MPI.pdf
+mkdir Books
+open_with ems
+search machine learning
+search code
+search tabout
+open_with mnow
+search json
+search mp4
+open_with a
+fmark dev_ranger
+search node
+search hello
+open_with 0
+search its
+search meslo
+search mplus
+search us
+search vim
+search nvim
+search pbt
+search sshfs
+search fuse
+search kara
+open_with 2
+open_with 1
+search keybo
+rename EdgeABC.keylayout
+search keyb
+search ranger
+search solution
+search hw2
+search 013
+search 
+search config
+search 02
+quicklookqr
+select eta002_loss.png
+mark_file
+mark_files
+mark_files toggle=True
+tag
+mark_tag
+rename .png
+quicklook
+search caps
+
+rename 

@@ -34,4 +34,9 @@ sys.dont_write_bytecode = '-c' in ARGV or '--clean' in ARGV
 
 # Start ranger
 import ranger  # NOQA pylint: disable=import-self,wrong-import-position
-sys.exit(ranger.main())  # pylint: disable=no-member
+import time
+from contextlib import redirect_stdout
+with open('/Users/edge/Applications/ranger/log/log_{}.txt'.format(time.time()), 'w') as f:
+    # with redirect_stdout(f):
+    print('data')
+    sys.exit(ranger.main())  # pylint: disable=no-member

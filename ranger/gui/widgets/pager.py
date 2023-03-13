@@ -114,16 +114,16 @@ class Pager(Widget):  # pylint: disable=too-many-instance-attributes
         if self.image and self.need_redraw_image:
             self.source = None
             self.need_redraw_image = False
-            try:
-                self.fm.image_displayer.draw(self.image, self.x, self.y,
+            self.fm.image_displayer.draw(self.image, self.x, self.y,
                                              self.wid, self.hei)
-            except ImgDisplayUnsupportedException as ex:
-                self.fm.settings.preview_images = False
-                self.fm.notify(ex, bad=True)
-            except Exception as ex:  # pylint: disable=broad-except
-                self.fm.notify(ex, bad=True)
-            else:
-                self.image_drawn = True
+            # try:
+            # except ImgDisplayUnsupportedException as ex:
+            #     self.fm.settings.preview_images = False
+            #     self.fm.notify(ex, bad=True)
+            # except Exception as ex:  # pylint: disable=broad-except
+            #     self.fm.notify(ex, bad=True)
+            # else:
+            self.image_drawn = True
 
     def _draw_line(self, i, line):
         if self.markup is None:
