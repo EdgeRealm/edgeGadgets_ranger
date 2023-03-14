@@ -1,5 +1,3 @@
-mkdir 1to5
-mkdir reference
 rename RobustRL_T1_MPI.pdf
 mkdir Books
 open_with ems
@@ -34,7 +32,6 @@ search solution
 search hw2
 search 013
 search 
-search config
 search 02
 quicklookqr
 select eta002_loss.png
@@ -47,4 +44,7 @@ rename .png
 quicklook
 search caps
 
+search config
 rename 
+rename Applications
+open_with 
