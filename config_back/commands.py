@@ -67,71 +67,89 @@ class fzfLocate(Command):
 
 
 # -----------------------------------------------------------------------------
-class edgeFinderSelect(Command):
-    class suppress_stdout_stderr(object):
-        '''
-        A context manager for doing a "deep suppression" of stdout and stderr in 
-        Python, i.e. will suppress all print, even if the print originates in a 
-        compiled C/Fortran sub-function.
-        This will not suppress raised exceptions, since exceptions are printed
-        to stderr just before a script exits, and after the context manager has
-        exited (at least, I think that is why it lets exceptions through).      
+class suppress_stdout_stderr(object):
+    '''
+    A context manager for doing a "deep suppression" of stdout and stderr in 
+    Python, i.e. will suppress all print, even if the print originates in a 
+    compiled C/Fortran sub-function.
+    This will not suppress raised exceptions, since exceptions are printed
+    to stderr just before a script exits, and after the context manager has
+    exited (at least, I think that is why it lets exceptions through).      
 
-        '''
-        def __init__(self):
-            # Open a pair of null files
-            self.null_fds =  [os.open(os.devnull,os.O_RDWR) for x in range(2)]
-            # Save the actual stdout (1) and stderr (2) file descriptors.
-            self.save_fds = [os.dup(1), os.dup(2)]
+    '''
+    def __init__(self):
+        # Open a pair of null files
+        self.null_fds =  [os.open(os.devnull,os.O_RDWR) for x in range(2)]
+        # Save the actual stdout (1) and stderr (2) file descriptors.
+        self.save_fds = [os.dup(1), os.dup(2)]
 
-        def __enter__(self):
-            # Assign the null pointers to stdout and stderr.
-            os.dup2(self.null_fds[0],1)
-            os.dup2(self.null_fds[1],2)
+    def __enter__(self):
+        # Assign the null pointers to stdout and stderr.
+        os.dup2(self.null_fds[0],1)
+        os.dup2(self.null_fds[1],2)
 
-        def __exit__(self, *_):
-            # Re-assign the real stdout/stderr back to (1) and (2)
-            os.dup2(self.save_fds[0],1)
-            os.dup2(self.save_fds[1],2)
-            # Close all file descriptors
-            for fd in self.null_fds + self.save_fds:
-                os.close(fd)
+    def __exit__(self, *_):
+        # Re-assign the real stdout/stderr back to (1) and (2)
+        os.dup2(self.save_fds[0],1)
+        os.dup2(self.save_fds[1],2)
+        # Close all file descriptors
+        for fd in self.null_fds + self.save_fds:
+            os.close(fd)
 
+
+def markSelectedFiles(fm, fileNames):
+    # Sort 
+    fileNames.sort()
+    fm.cd(fileNames[0])
+    sortFunc_prev = fm.thisdir.sort_dict[fm.thisdir.settings.sort]
+    fm.thisdir.sort_dict[fm.thisdir.settings.sort] = sort_by_basename
+    fm.thisdir.sort()
+    files = fm.thisdir.files
+
+    # Mark selected files
+    cnum, flag = 0, 0
+    for fileName in fileNames:
+        while not flag:
+            if fileName == files[cnum].path:
+                fm.thisdir.mark_item(files[cnum], val=True)
+                flag = 1
+            cnum += 1
+        flag = 0
+
+    # Aftermath
+    fm.ui.need_redraw = True
+    fm.thisdir.sort_dict[fm.thisdir.settings.sort] = sortFunc_prev
+    fm.thisdir.sort()
+    fm.select_file(fileNames[0])
+
+
+class edgeSelectGui(Command):
     def execute(self):
         # Select Files
-        with self.suppress_stdout_stderr():
+        with suppress_stdout_stderr():
             app = QtWidgets.QApplication(sys.argv)
             os.system('''/usr/bin/osascript -e 'tell app "Finder" to set frontmost of process "python" to true' ''')
             fileNames, _ = QtWidgets.QFileDialog.getOpenFileNames(None, "QFileDialog.getOpenFileName()", self.fm.thisdir.path, "All Files (*);;Python Files (*.py)", )
 
             app.exit()
             os.system('''/usr/bin/osascript -e 'tell app "Finder" to set frontmost of process "iTerm2" to true' ''')
+
         if len(fileNames) == 0:
             return
 
-        # Sort 
-        fileNames.sort()
-        self.fm.cd(fileNames[0])
-        sortFunc_prev = self.fm.thisdir.sort_dict[self.fm.thisdir.settings.sort]
-        self.fm.thisdir.sort_dict[self.fm.thisdir.settings.sort] = sort_by_basename
-        self.fm.thisdir.sort()
-        files = self.fm.thisdir.files
+        markSelectedFiles(self.fm, fileNames)
 
-        # Mark selected files
-        cnum, flag = 0, 0
-        for fileName in fileNames:
-            while not flag:
-                if fileName == files[cnum].path:
-                    self.fm.thisdir.mark_item(files[cnum], val=True)
-                    flag = 1
-                cnum += 1
-            flag = 0
 
-        # Aftermath
-        self.fm.ui.need_redraw = True
-        self.fm.thisdir.sort_dict[self.fm.thisdir.settings.sort] = sortFunc_prev
-        self.fm.thisdir.sort()
-        self.fm.select_file(fileNames[0])
+class edgeSelectFin(Command):
+    import subprocess
+    def execute(self):
+        with suppress_stdout_stderr():
+            try:
+                fileNames = self.subprocess.check_output(["osascript", "-l", "JavaScript", "-e", "Application('Finder').selection().map(function (f) {return f.url().replace(/^file:\/\//, '').replace(/%20/g, ' ')})"]).decode('utf-8').replace("\n", '').split(', ')
+            except:
+                self.fm.notify("No File Selected!")
+            else:
+                markSelectedFiles(self.fm, fileNames)
 
 
 class edgeDragonDrop(Command):

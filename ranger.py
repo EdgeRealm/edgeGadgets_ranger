@@ -37,4 +37,5 @@ import ranger  # NOQA pylint: disable=import-self,wrong-import-position
 import time
 from contextlib import redirect_stdout
 with open('/Users/edge/Applications/ranger/log/log.txt', 'w') as f:
-    sys.exit(ranger.main())  # pylint: disable=no-member
+    with redirect_stdout(f):
+        sys.exit(ranger.main())  # pylint: disable=no-member
