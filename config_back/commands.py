@@ -99,7 +99,7 @@ class suppress_stdout_stderr(object):
 
 def markSelectedFiles(fm, fileNames):
     # Sort 
-    fileNames.sort()
+    fileNames.sort(key=str.casefold)    # !!!
     fm.cd(fileNames[0])
     sortFunc_prev = fm.thisdir.sort_dict[fm.thisdir.settings.sort]
     fm.thisdir.sort_dict[fm.thisdir.settings.sort] = sort_by_basename
@@ -109,18 +109,22 @@ def markSelectedFiles(fm, fileNames):
     # Mark selected files
     cnum, flag = 0, 0
     for fileName in fileNames:
-        while not flag:
-            if fileName == files[cnum].path:
-                fm.thisdir.mark_item(files[cnum], val=True)
-                flag = 1
-            cnum += 1
-        flag = 0
+        print(fileName)
+        if os.path.isfile(fileName):    # Ignore the Folders!!!
+            while not flag:
+                fm.notify(files[cnum].path)
+                if fileName == files[cnum].path:
+                    fm.thisdir.mark_item(files[cnum], val=True)
+                    flag = 1
+                cnum += 1
+            flag = 0
 
     # Aftermath
     fm.ui.need_redraw = True
     fm.thisdir.sort_dict[fm.thisdir.settings.sort] = sortFunc_prev
     fm.thisdir.sort()
     fm.select_file(fileNames[0])
+
 
 
 class edgeSelectGui(Command):
@@ -145,7 +149,7 @@ class edgeSelectFin(Command):
     def execute(self):
         with suppress_stdout_stderr():
             try:
-                fileNames = self.subprocess.check_output(["osascript", "-l", "JavaScript", "-e", "Application('Finder').selection().map(function (f) {return f.url().replace(/^file:\/\//, '').replace(/%20/g, ' ')})"]).decode('utf-8').replace("\n", '').split(', ')
+                fileNames = self.subprocess.check_output(["osascript", "-l", "JavaScript", "-e", "Application('Finder').selection().map(function (f) {return f.url().replace(/^file:\/\//, '').replace(/%20/g, ' ')})"]).decode('utf-8').replace("\n", '').replace(', /', ', //').split(', /')
             except:
                 self.fm.notify("No File Selected!")
             else:
