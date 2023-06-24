@@ -25,17 +25,16 @@ return "$return_value"
 
 from __future__ import (absolute_import, division, print_function)
 
-import sys
+import sys, os
 
-# Need to find out whether or not the flag --clean was used ASAP,
+# Need to find out whether or not the flag --clean was used ASAP,``
 # because --clean is supposed to disable bytecode compilation
 ARGV = sys.argv[1:sys.argv.index('--')] if '--' in sys.argv else sys.argv[1:]
 sys.dont_write_bytecode = '-c' in ARGV or '--clean' in ARGV
+if 'RANGER_LEVEL' in os.environ:
+    del os.environ['RANGER_LEVEL']
 
 # Start ranger
 import ranger  # NOQA pylint: disable=import-self,wrong-import-position
-import time
-from contextlib import redirect_stdout
-with open('/Users/edge/Applications/ranger/log/log.txt', 'w') as f:
-    with redirect_stdout(f):
-        sys.exit(ranger.main())  # pylint: disable=no-member
+
+sys.exit(ranger.main())    

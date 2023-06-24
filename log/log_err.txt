@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "/Users/edge/Applications/ranger/ranger.py", line 44, in <module>
+    sys.exit(ranger.main())
+  File "/Users/edge/Applications/ranger/ranger/core/main.py", line 234, in main
+    fm.ui.destroy()
+  File "/Users/edge/Applications/ranger/ranger/gui/ui.py", line 188, in destroy
+    self.suspend()
+  File "/Users/edge/Applications/ranger/ranger/gui/ui.py", line 152, in suspend
+    curses.nocbreak()
+_curses.error: nocbreak() returned ERR
+Traceback (most recent call last):
+  File "/Users/edge/Applications/ranger/ranger.py", line 44, in <module>
+    sys.exit(ranger.main())
+  File "/Users/edge/Applications/ranger/ranger/core/main.py", line 234, in main
+    fm.ui.destroy()
+  File "/Users/edge/Applications/ranger/ranger/gui/ui.py", line 188, in destroy
+    self.suspend()
+  File "/Users/edge/Applications/ranger/ranger/gui/ui.py", line 152, in suspend
+    curses.nocbreak()
+_curses.error: nocbreak() returned ERR
+Traceback (most recent call last):
+  File "/Users/edge/Applications/ranger/ranger.py", line 46, in <module>
+  File "/Users/edge/Applications/ranger/ranger/core/main.py", line 234, in main
+    fm.ui.destroy()
+  File "/Users/edge/Applications/ranger/ranger/gui/ui.py", line 188, in destroy
+    self.suspend()
+  File "/Users/edge/Applications/ranger/ranger/gui/ui.py", line 152, in suspend
+    curses.nocbreak()
+_curses.error: nocbreak() returned ERR
